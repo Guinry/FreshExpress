@@ -1,0 +1,8 @@
+fresh:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    host: localhost
+    port: 3306
+    database: fresh_express
+    username: root
+    password: root
