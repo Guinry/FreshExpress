@@ -1,7 +1,9 @@
 package com.fresh.service.impl;
 
 import com.fresh.constant.MessageConstant;
+import com.fresh.constant.PasswordConstant;
 import com.fresh.constant.StatusConstant;
+import com.fresh.dto.EmployeeDTO;
 import com.fresh.dto.EmployeeLoginDTO;
 import com.fresh.entity.Employee;
 import com.fresh.exception.AccountLockedException;
@@ -9,8 +11,12 @@ import com.fresh.exception.AccountNotFoundException;
 import com.fresh.exception.PasswordErrorException;
 import com.fresh.mapper.EmployeeMapper;
 import com.fresh.service.EmployeeService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
+
+import java.time.LocalDateTime;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -38,7 +44,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
 
         //密码比对
-        // TODO 后期需要进行md5加密，然后再进行比对
+        //对前端传过来的明文密码进行md5加密处理
+        password = DigestUtils.md5DigestAsHex(password.getBytes());
         if (!password.equals(employee.getPassword())) {
             //密码错误
             throw new PasswordErrorException(MessageConstant.PASSWORD_ERROR);
@@ -51,6 +58,28 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         //3、返回实体对象
         return employee;
+    }
+
+    /**
+     * 新增员工
+     *
+     * @param employeeDTO
+     */
+    @Override
+    public void save(EmployeeDTO employeeDTO) {
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(employeeDTO, employee);
+
+        employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
+        employee.setStatus(StatusConstant.ENABLE);
+
+        employee.setCreateTime(LocalDateTime.now());
+        employee.setUpdateTime(LocalDateTime.now());
+
+        employee.setCreateUser(10L);
+        employee.setUpdateUser(10L);
+
+        employeeMapper.insert(employee);
     }
 
 }
