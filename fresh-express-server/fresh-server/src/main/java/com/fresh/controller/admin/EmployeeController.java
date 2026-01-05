@@ -3,8 +3,10 @@ package com.fresh.controller.admin;
 import com.fresh.constant.JwtClaimsConstant;
 import com.fresh.dto.EmployeeDTO;
 import com.fresh.dto.EmployeeLoginDTO;
+import com.fresh.dto.EmployeePageQueryDTO;
 import com.fresh.entity.Employee;
 import com.fresh.properties.JwtProperties;
+import com.fresh.result.PageResult;
 import com.fresh.result.Result;
 import com.fresh.service.EmployeeService;
 import com.fresh.utils.JwtUtil;
@@ -13,10 +15,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -88,7 +87,56 @@ public class EmployeeController {
     public Result<EmployeeDTO> save(@RequestBody EmployeeDTO employeeDTO) {
         log.info("新增员工：{}", employeeDTO);
         employeeService.save(employeeDTO);
+        return Result.success(employeeDTO);
+    }
+
+    /**
+     * 分页查询
+     *
+     * @param employeePageQueryDTO
+     * @return
+     */
+    @GetMapping("/page")
+    @ApiOperation("分页查询")
+    public Result<PageResult> page(EmployeePageQueryDTO employeePageQueryDTO) {
+        log.info("分页查询：{}", employeePageQueryDTO);
+        PageResult pageResult = employeeService.pageQuery(employeePageQueryDTO);
+        return Result.success(pageResult);
+    }
+
+    /**
+     * 启用禁用员工账号
+     *
+     * @param status
+     * @param id
+     * @return
+     */
+    @PostMapping("/status/{status}")
+    @ApiOperation("启用禁用员工账号")
+    public Result startOrStop(@PathVariable Integer status, Long id) {
+        log.info("修改员工 {} 的状态为： {}", id, status);
+        employeeService.startOrStop(status, id);
         return Result.success();
     }
 
+    /**
+     * 根据id查询员工信息
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    @ApiOperation("根据id查询员工信息")
+    public Result<Employee> getById(@PathVariable Long id) {
+        Employee employee = employeeService.getById(id);
+        return Result.success(employee);
+    }
+
+    @PutMapping
+    @ApiOperation("员工信息修改")
+    public Result<EmployeeDTO> update(@RequestBody EmployeeDTO employeeDTO) {
+        log.info("员工信息修改：{}", employeeDTO);
+        employeeService.update(employeeDTO);
+        return Result.success(employeeDTO);
+    }
 }
