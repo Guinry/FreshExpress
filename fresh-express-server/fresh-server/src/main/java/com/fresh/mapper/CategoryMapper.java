@@ -3,8 +3,10 @@ package com.fresh.mapper;
 import com.fresh.dto.CategoryPageQueryDTO;
 import com.fresh.entity.Category;
 import com.github.pagehelper.Page;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface CategoryMapper {
@@ -24,4 +26,25 @@ public interface CategoryMapper {
             "values " +
             "(#{type}, #{name}, #{sort}, #{status}, #{createTime}, #{updateTime}, #{createUser}, #{updateUser})")
     void insert(Category category);
+
+    /**
+     * 根据id查询
+     * @param id
+     * @return
+     */
+    @Select("select * from category where id = #{id}")
+    Category getById(Long id);
+
+    /**
+     * 修改分类
+     * @param category
+     */
+    void update(Category category);
+
+    /**
+     * 删除分类
+     * @param id
+     */
+    @Delete("delete from category where id = #{id}")
+    void delete(Long id);
 }

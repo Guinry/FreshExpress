@@ -63,4 +63,46 @@ public class CategoryServiceImpl implements CategoryService {
 
         categoryMapper.insert(category);
     }
+
+    /**
+     * 根据id查询分类
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public Category getById(Long id) {
+        return categoryMapper.getById(id);
+    }
+    /**
+     * 修改分类
+     *
+     * @param category
+     */
+    @Override
+    public void update(Category category) {
+        categoryMapper.update(category);
+    }
+
+    @Override
+    public void startOrStop(Integer status, Long id) {
+        Category category = Category.builder()
+                .status(status)
+                .id(id)
+                .updateTime(LocalDateTime.now())
+                .updateUser(BaseContext.getCurrentId())
+                .build();
+
+        categoryMapper.update(category);
+    }
+
+    /**
+     * 删除分类
+     *
+     * @param id
+     */
+    @Override
+    public void delete(Long id) {
+        categoryMapper.delete(id);
+    }
 }
