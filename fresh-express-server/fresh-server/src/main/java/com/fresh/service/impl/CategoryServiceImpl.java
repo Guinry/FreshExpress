@@ -1,11 +1,15 @@
 package com.fresh.service.impl;
 
+import com.fresh.constant.MessageConstant;
 import com.fresh.constant.StatusConstant;
 import com.fresh.context.BaseContext;
 import com.fresh.dto.CategoryDTO;
 import com.fresh.dto.CategoryPageQueryDTO;
 import com.fresh.entity.Category;
+import com.fresh.exception.DeletionNotAllowedException;
 import com.fresh.mapper.CategoryMapper;
+import com.fresh.mapper.DishMapper;
+import com.fresh.mapper.SetmealMapper;
 import com.fresh.result.PageResult;
 import com.fresh.service.CategoryService;
 import com.github.pagehelper.Page;
@@ -22,6 +26,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     private CategoryMapper categoryMapper;
+    @Autowired
+    private DishMapper dishMapper;
+    @Autowired
+    private SetmealMapper setmealMapper;
     /**
      * 分类分页查询
      *
@@ -51,16 +59,6 @@ public class CategoryServiceImpl implements CategoryService {
 
         category.setStatus(StatusConstant.DISABLE);
 
-        category.setType(categoryDTO.getType());
-        category.setSort(categoryDTO.getSort());
-        category.setName(categoryDTO.getName());
-
-        category.setCreateTime(LocalDateTime.now());
-        category.setUpdateTime(LocalDateTime.now());
-
-        category.setCreateUser(BaseContext.getCurrentId());
-        category.setUpdateUser(BaseContext.getCurrentId());
-
         categoryMapper.insert(category);
     }
 
@@ -74,23 +72,34 @@ public class CategoryServiceImpl implements CategoryService {
     public Category getById(Long id) {
         return categoryMapper.getById(id);
     }
+
     /**
      * 修改分类
      *
-     * @param category
+     * @param categoryDTO
      */
     @Override
-    public void update(Category category) {
+    public void update(CategoryDTO categoryDTO) {
+        Category category = this.getById(categoryDTO.getId());
+
+        category.setStatus(StatusConstant.DISABLE);
+        category.setName(categoryDTO.getName());
+        category.setSort(categoryDTO.getSort());
+
         categoryMapper.update(category);
     }
 
+    /**
+     * 启用禁用分类
+     *
+     * @param status
+     * @param id
+     */
     @Override
     public void startOrStop(Integer status, Long id) {
         Category category = Category.builder()
                 .status(status)
                 .id(id)
-                .updateTime(LocalDateTime.now())
-                .updateUser(BaseContext.getCurrentId())
                 .build();
 
         categoryMapper.update(category);
@@ -102,7 +111,16 @@ public class CategoryServiceImpl implements CategoryService {
      * @param id
      */
     @Override
-    public void delete(Long id) {
-        categoryMapper.delete(id);
+    public void deleteById(Long id) {
+        Integer count =dishMapper.countByCategoryId(id);
+        if (count > 0) {
+            throw new DeletionNotAllowedException(MessageConstant.CATEGORY_BE_RELATED_BY_DISH);
+        }
+
+        count = setmealMapper.countByCategoryId(id);
+        if (count > 0) {
+            throw new DeletionNotAllowedException(MessageConstant.CATEGORY_BE_RELATED_BY_SETMEAL);
+        }
+        categoryMapper.deleteById(id);
     }
 }

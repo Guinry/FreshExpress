@@ -29,9 +29,9 @@ public interface CategoryService {
 
     /**
      * 修改分类
-     * @param category
+     * @param categoryDTO
      */
-    void update(Category category);
+    void update(CategoryDTO categoryDTO);
 
     /**
      * 启用禁用员工账号
@@ -44,5 +44,5 @@ public interface CategoryService {
      * 删除分类
      * @param id
      */
-    void delete(Long id);
+    void deleteById(Long id);
 }

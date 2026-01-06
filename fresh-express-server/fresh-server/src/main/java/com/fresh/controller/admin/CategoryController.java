@@ -1,10 +1,7 @@
 package com.fresh.controller.admin;
 
-import com.fresh.constant.StatusConstant;
-import com.fresh.context.BaseContext;
 import com.fresh.dto.CategoryDTO;
 import com.fresh.dto.CategoryPageQueryDTO;
-import com.fresh.entity.Category;
 import com.fresh.result.PageResult;
 import com.fresh.result.Result;
 import com.fresh.service.CategoryService;
@@ -14,8 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-
 @RestController
 @RequestMapping("/admin/category")
 @Slf4j
@@ -24,7 +19,6 @@ public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
-
     /**
      * 分类分页查询
      * @param categoryPageQueryDTO
@@ -45,10 +39,10 @@ public class CategoryController {
      */
     @PostMapping
     @ApiOperation("新增分类")
-    public Result<CategoryDTO> save(@RequestBody CategoryDTO categoryDTO) {
+    public Result<String> save(@RequestBody CategoryDTO categoryDTO) {
         log.info("新增分类：{}", categoryDTO);
         categoryService.save(categoryDTO);
-        return Result.success(categoryDTO);
+        return Result.success();
     }
 
     /**
@@ -61,14 +55,7 @@ public class CategoryController {
     public Result update(@RequestBody CategoryDTO categoryDTO) {
         log.info("修改分类：{}", categoryDTO);
 
-        Category category = categoryService.getById(categoryDTO.getId());
-        category.setStatus(StatusConstant.DISABLE);
-        category.setName(categoryDTO.getName());
-        category.setSort(categoryDTO.getSort());
-        category.setUpdateTime(LocalDateTime.now());
-        category.setUpdateUser(BaseContext.getCurrentId());
-
-        categoryService.update(category);
+        categoryService.update(categoryDTO);
         return Result.success();
     }
 
@@ -89,15 +76,15 @@ public class CategoryController {
     }
 
     /**
-     * 删除分类
+     * 根据id删除分类
      * @param id
      * @return
      */
     @DeleteMapping
     @ApiOperation("删除分类")
-    public Result delete(Long id) {
+    public Result<String> deleteById(Long id) {
         log.info("删除分类：{}", id);
-        categoryService.delete(id);
+        categoryService.deleteById(id);
         return Result.success();
     }
 }
