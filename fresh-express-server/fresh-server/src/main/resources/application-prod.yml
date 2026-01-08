@@ -1,22 +1,22 @@
-# 数据库（本地）
+# 数据库（ECS 内网）
 spring:
   datasource:
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
       url: jdbc:mysql://localhost:3306/fresh_express?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true
-      username: root
-      password: G200410115812
+      username: fresh
+      password:
 
-# 文件存储（本地）
+# 文件存储（ECS 磁盘）
 file:
   storage:
-    access-path: http://localhost:8080
+    access-url: http://47.104.195.63:8080
     base-path: /app/upload
     project-path: /FreshExpress
 
-# JWT（开发环境）
+# JWT（生产环境）
 fresh:
   jwt:
-    admin-secret-key: guinry_dev
-    admin-ttl: 720000000
+    admin-secret-key: guinry_prod
+    admin-ttl: 72000000
     admin-token-name: token

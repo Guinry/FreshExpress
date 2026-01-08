@@ -72,6 +72,7 @@ export default class extends Vue {
     // this.imageUrl = response.data
     // this.imageUrl = `http://172.17.2.120:8080/common/download?name=${response.data}`
     this.imageUrl = `${response.data}`
+    console.log('upload response:', response)
     // this.imageUrl = `${baseUrl}/common/download?name=${response.data}`
 
     this.$emit('imageChange', this.imageUrl)
