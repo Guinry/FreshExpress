@@ -2,6 +2,7 @@ package com.fresh.controller.admin;
 
 import com.fresh.dto.DishDTO;
 import com.fresh.dto.DishPageQueryDTO;
+import com.fresh.entity.Dish;
 import com.fresh.result.PageResult;
 import com.fresh.result.Result;
 import com.fresh.service.DishService;
@@ -100,5 +101,19 @@ public class DishController {
         log.info("修改菜品：{}", dishDTO);
         dishService.update(dishDTO);
         return Result.success();
+    }
+
+    /**
+     * 根据分类id查询菜品
+     * @param categoryId
+     * @return
+     */
+    @GetMapping("/list")
+    @ApiOperation("根据分类id查询菜品")
+    public Result<List<Dish>> list(Long categoryId) {
+        log.info("根据分类id查询菜品：{}", categoryId);
+
+        List<Dish> list = dishService.getByCategoryId(categoryId);
+        return Result.success(list);
     }
 }

@@ -2,6 +2,7 @@ package com.fresh.service;
 
 import com.fresh.dto.DishDTO;
 import com.fresh.dto.DishPageQueryDTO;
+import com.fresh.entity.Dish;
 import com.fresh.result.PageResult;
 import com.fresh.vo.DishVO;
 
@@ -46,4 +47,11 @@ public interface DishService {
      * @param dishDTO
      */
     void update(DishDTO dishDTO);
+
+    /**
+     * 根据分类id查询菜品
+     * @param categoryId
+     * @return
+     */
+    List<Dish> getByCategoryId(Long categoryId);
 }

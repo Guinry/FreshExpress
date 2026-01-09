@@ -94,7 +94,7 @@ public class DishServiceImpl implements DishService {
     }
 
     /**
-     * 批量起售停售
+     * 菜品起售停售
      * @param status
      * @param id
      */
@@ -143,5 +143,15 @@ public class DishServiceImpl implements DishService {
             flavors.forEach(dishFlavor -> dishFlavor.setDishId(disId));
             dishFlavorMapper.insertBatch(flavors);
         }
+    }
+
+    /**
+     * 根据分类id查询菜品
+     * @param categoryId
+     * @return
+     */
+    @Override
+    public List<Dish> getByCategoryId(Long categoryId) {
+        return dishMapper.getByCategoryId(categoryId);
     }
 }
