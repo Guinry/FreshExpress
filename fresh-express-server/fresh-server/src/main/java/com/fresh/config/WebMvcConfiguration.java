@@ -1,6 +1,7 @@
 package com.fresh.config;
 
 import com.fresh.interceptor.JwtTokenAdminInterceptor;
+import com.fresh.interceptor.JwtTokenUserInterceptor;
 import com.fresh.json.JacksonObjectMapper;
 import io.netty.util.Mapping;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,9 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     @Autowired
     private JwtTokenAdminInterceptor jwtTokenAdminInterceptor;
 
+    @Autowired
+    private JwtTokenUserInterceptor jwtTokenUserInterceptor;
+
     @Value("${file.storage.base-path}")
     private String basePath;
 
@@ -45,6 +49,11 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         registry.addInterceptor(jwtTokenAdminInterceptor)
                 .addPathPatterns("/admin/**")
                 .excludePathPatterns("/admin/employee/login");
+
+        registry.addInterceptor(jwtTokenUserInterceptor)
+                .addPathPatterns("/user/**")
+                .excludePathPatterns("/user/user/login")
+                .excludePathPatterns("/user/shop/status");
     }
 
     /**

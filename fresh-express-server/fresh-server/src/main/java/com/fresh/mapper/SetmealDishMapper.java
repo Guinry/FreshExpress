@@ -1,6 +1,7 @@
 package com.fresh.mapper;
 
 import com.fresh.entity.SetmealDish;
+import com.fresh.vo.DishItemVO;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -43,4 +44,14 @@ public interface SetmealDishMapper {
      */
     @Select("select * from setmeal_dish where setmeal_id = #{setmealId}")
     List<SetmealDish> getBySetmealId(Long setmealId);
+
+    /**
+     * 根据套餐id查询包含的菜品列表
+     * @param id
+     * @return
+     */
+    @Select("select setmeal_dish.name, setmeal_dish.copies, dish.image, dish.description " +
+            "from setmeal_dish left join dish on setmeal_dish.dish_id = dish.id " +
+            "where setmeal_dish.setmeal_id = #{id}")
+    List<DishItemVO> getDishItemById(Long id);
 }

@@ -13,6 +13,7 @@ import com.fresh.mapper.SetmealDishMapper;
 import com.fresh.mapper.SetmealMapper;
 import com.fresh.result.PageResult;
 import com.fresh.service.SetmealService;
+import com.fresh.vo.DishItemVO;
 import com.fresh.vo.SetmealVO;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -127,5 +128,25 @@ public class SetmealServiceImpl implements SetmealService {
         setmealVO.setSetmealDishes(setmealDishMapper.getBySetmealId(id));
 
         return setmealVO;
+    }
+
+    /**
+     * 根据分类id条件查询套餐
+     * @param setmeal
+     * @return
+     */
+    @Override
+    public List<Setmeal> getByCategoryId(Setmeal setmeal) {
+        List<Setmeal> list = setmealMapper.list(setmeal);
+        return list;
+    }
+    /**
+     * 根据套餐id查询包含的菜品列表
+     * @param id
+     * @return
+     */
+    @Override
+    public List<DishItemVO> getDishItemById(Long id) {
+        return setmealDishMapper.getDishItemById(id);
     }
 }

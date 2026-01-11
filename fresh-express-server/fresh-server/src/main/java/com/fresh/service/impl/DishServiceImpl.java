@@ -32,6 +32,7 @@ public class DishServiceImpl implements DishService {
 
     @Autowired
     private DishFlavorMapper dishFlavorMapper;
+
     @Autowired
     private SetmealDishMapper setmealDishMapper;
 
@@ -153,5 +154,24 @@ public class DishServiceImpl implements DishService {
     @Override
     public List<Dish> getByCategoryId(Long categoryId) {
         return dishMapper.getByCategoryId(categoryId);
+    }
+
+    /**
+     * 根据分类id条件查询菜品
+     * @param dish
+     * @return
+     */
+    @Override
+    public List<DishVO> getByCategoryId(Dish dish) {
+        List<Dish> dishList = dishMapper.list(dish);
+
+        List<DishVO> dishVOList = dishList.stream().map(d -> {
+            DishVO dishVO = new DishVO();
+            BeanUtils.copyProperties(d, dishVO);
+            dishVO.setFlavors(dishFlavorMapper.getByDishId(d.getId()));
+            return dishVO;
+        }).toList();
+
+        return dishVOList;
     }
 }

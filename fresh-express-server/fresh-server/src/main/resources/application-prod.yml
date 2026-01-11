@@ -20,3 +20,10 @@ fresh:
     admin-secret-key: guinry_prod
     admin-ttl: 72000000
     admin-token-name: token
+
+    user-secret-key: guinry_dev
+    user-ttl: 72000000
+    user-token-name: authentication
+  wechat:
+    appid: wxad5c8bd9f0f7a73d
+    secret: 3bb2a84bbb26b0a7b2f58384a89ef1b0

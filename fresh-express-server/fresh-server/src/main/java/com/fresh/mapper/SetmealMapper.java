@@ -4,6 +4,7 @@ import com.fresh.annotation.AutoFill;
 import com.fresh.dto.SetmealPageQueryDTO;
 import com.fresh.entity.Setmeal;
 import com.fresh.enumeration.OperationType;
+import com.fresh.vo.DishItemVO;
 import com.fresh.vo.SetmealVO;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
@@ -56,4 +57,11 @@ public interface SetmealMapper {
      * @param ids
      */
     void deleteByIds(List<Long> ids);
+
+    /**
+     * 根据分类id条件查询套餐
+     * @param setmeal
+     * @return
+     */
+    List<Setmeal> list(Setmeal setmeal);
 }

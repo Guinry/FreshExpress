@@ -49,7 +49,7 @@ public interface CategoryService {
     void deleteById(Long id);
 
     /**
-     * 查询分类
+     * 根据类型查询
      * @param type
      * @return
      */

@@ -123,7 +123,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     /**
-     * 查询分类
+     * 根据类型查询
      *
      * @param type
      * @return
