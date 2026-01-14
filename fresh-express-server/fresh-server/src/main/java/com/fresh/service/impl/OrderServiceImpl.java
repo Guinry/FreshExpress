@@ -1,28 +1,28 @@
 package com.fresh.service.impl;
 
+import com.alibaba.druid.support.json.JSONUtils;
 import com.fresh.constant.MessageConstant;
 import com.fresh.context.BaseContext;
+import com.fresh.dto.OrdersPaymentDTO;
 import com.fresh.dto.OrdersSubmitDTO;
-import com.fresh.entity.AddressBook;
-import com.fresh.entity.OrderDetail;
-import com.fresh.entity.Orders;
-import com.fresh.entity.ShoppingCart;
+import com.fresh.entity.*;
 import com.fresh.exception.AddressBookBusinessException;
 import com.fresh.exception.ShoppingCartBusinessException;
-import com.fresh.mapper.AddressBookMapper;
-import com.fresh.mapper.OrderDetailMapper;
-import com.fresh.mapper.OrderMapper;
-import com.fresh.mapper.ShoppingCartMapper;
+import com.fresh.mapper.*;
 import com.fresh.service.OrderService;
+import com.fresh.vo.OrderPaymentVO;
 import com.fresh.vo.OrderSubmitVO;
+import org.apache.http.entity.ContentType;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -42,6 +42,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderDetailMapper orderDetailMapper;
+
+    @Autowired
+    private UserMapper userMapper;
     /**
      * 用户下单
      *
@@ -104,5 +107,33 @@ public class OrderServiceImpl implements OrderService {
                 .build();
 
         return orderSubmitVO;
+    }
+
+    /**
+     * 支付订单
+     *
+     * @param ordersPaymentDTO
+     * @return
+     */
+    @Override
+    public OrderPaymentVO payment(OrdersPaymentDTO ordersPaymentDTO) {
+        this.paySuccess(ordersPaymentDTO.getOrderNumber());
+        return new OrderPaymentVO();
+    }
+
+    /**
+     * 支付成功，修改订单状态
+     *
+     * @param orderNumber
+     */
+    @Override
+    public void paySuccess(String orderNumber) {
+        Orders orders = Orders.builder()
+                .number(orderNumber)
+                .status(Orders.TO_BE_CONFIRMED)
+                .payStatus(Orders.PAID)
+                .checkoutTime(LocalDateTime.now())
+                .build();
+        orderMapper.updateByNumber(orders);
     }
 }
