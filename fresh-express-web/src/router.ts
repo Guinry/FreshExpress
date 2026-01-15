@@ -29,12 +29,12 @@ const router = new Router({
       path: "/login",
       component: () =>
         import(/* webpackChunkName: "login" */ "@/views/login/index.vue"),
-      meta: { title: "苍穹外卖", hidden: true, notNeedAuth: true }
+      meta: { title: "速鲜达", hidden: true, notNeedAuth: true }
     },
     {
       path: "/404",
       component: () => import(/* webpackChunkName: "404" */ "@/views/404.vue"),
-      meta: { title: "苍穹外卖", hidden: true, notNeedAuth: true }
+      meta: { title: "速鲜达", hidden: true, notNeedAuth: true }
     },
     {
       path: "/",
@@ -97,7 +97,7 @@ const router = new Router({
             hidden: true
           }
         },
-        
+
         {
           path: "category",
           component: () =>
@@ -116,7 +116,7 @@ const router = new Router({
             icon: "icon-employee"
           }
         },
-        
+
         {
           path: "/employee/add",
           component: () =>
@@ -126,7 +126,7 @@ const router = new Router({
             hidden: true
           }
         },
-        
+
         {
           path: "/setmeal/add",
           component: () =>

@@ -56,8 +56,8 @@ public interface CategoryMapper {
 
     /**
      * 根据类型查询
-     * @param type
+     * @param category
      * @return
      */
-    List<Category> list(Integer type);
+    List<Category> list(Category  category);
 }
