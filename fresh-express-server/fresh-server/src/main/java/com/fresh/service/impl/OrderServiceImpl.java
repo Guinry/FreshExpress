@@ -410,6 +410,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         Orders orders = new Orders();
+        orders.setId(ordersDB.getId());
         orders.setStatus(Orders.COMPLETED);
         orders.setDeliveryTime(LocalDateTime.now());
 
